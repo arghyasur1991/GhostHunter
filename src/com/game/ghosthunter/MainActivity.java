@@ -10,6 +10,7 @@ public class MainActivity extends Activity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        // test commit
         setContentView(R.layout.main);
     }
 }
