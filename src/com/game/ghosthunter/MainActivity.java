@@ -20,6 +20,7 @@ public class MainActivity extends Activity{
     private SensorManager mSensorManager;
     private LightSensorModule mLightSensorModule;
     private GyroSensorModule mGyroSensorModule;
+    private MotionSensorModule mMotionSensorModule;
     
     private int width;
     private int height;
@@ -31,6 +32,7 @@ public class MainActivity extends Activity{
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mLightSensorModule = new LightSensorModule(this);
         mGyroSensorModule = new GyroSensorModule(this);
+        mMotionSensorModule = new MotionSensorModule(this);
         
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -69,6 +71,8 @@ public class MainActivity extends Activity{
     public void onPause() {
         glSurfaceView.release();
         mLightSensorModule.unregister();
+        mGyroSensorModule.unregister();
+        mMotionSensorModule.unregister();
         super.onPause();
     }
     
@@ -76,6 +80,8 @@ public class MainActivity extends Activity{
     public void onResume() {
     	super.onResume();
     	mLightSensorModule.register();
+        mGyroSensorModule.register();
+        mMotionSensorModule.register();
     }
     
     public void setValue(float[] value) {
