@@ -10,6 +10,11 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
         
+        <TextView android:id="@+id/LightValue"
+        android:layout_width="wrap_content"
+        android:text="123"
+        android:layout_height="wrap_content"/>
+    
     </RelativeLayout>
     
 </FrameLayout>

@@ -3,6 +3,7 @@ package com.game.ghosthunter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
@@ -10,10 +11,14 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class MainActivity extends Activity{
     
     private GLCameraSurfaceView glSurfaceView;
+    
+    private SensorManager mSensorManager;
+    private LightSensorModule mLightSensorModule;
     
     private int width;
     private int height;
@@ -21,6 +26,9 @@ public class MainActivity extends Activity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mLightSensorModule = new LightSensorModule(this);
         
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -38,6 +46,7 @@ public class MainActivity extends Activity{
         layout.addView(glSurfaceView);
         
         RelativeLayout newLayout = (RelativeLayout) findViewById(R.id.UILayout);
+       
         
         layout.bringChildToFront(newLayout);
     }
@@ -57,6 +66,22 @@ public class MainActivity extends Activity{
     @Override
     public void onPause() {
         glSurfaceView.release();
-        System.exit(0);
+        mLightSensorModule.unregister();
+        super.onPause();
+    }
+    
+    @Override
+    public void onResume() {
+    	super.onResume();
+    	mLightSensorModule.register();
+    }
+    
+    public void setValue(float[] value) {
+    	 TextView tView = (TextView) findViewById(R.id.LightValue);
+         tView.setText(""+value[0]);
+    }
+    
+    public SensorManager getSensorManager() {
+    	return mSensorManager;
     }
 }
