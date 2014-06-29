@@ -5,7 +5,7 @@ import android.hardware.SensorEvent;
 import java.util.Date;
 
 public class MotionSensorModule extends SensorModule{    
-    private final float alpha = 0.35f;
+    private final float alpha = 0.8f;
     
     private static float[] currentAcceleration = {0, 0, 0};
     private static float[] velocity = {0, 0, 0};
@@ -23,10 +23,17 @@ public class MotionSensorModule extends SensorModule{
     @Override
     public void onSensorChanged(SensorEvent event) {
         super.onSensorChanged(event);
-        applyFilter(gravity, mValues);
+        // Isolate the force of gravity with the low-pass filter.
+        for(int i = 0; i < 10; i++) {
+            gravity[0] = alpha * gravity[0] + (1 - alpha) * mValues[0];
+            gravity[1] = alpha * gravity[1] + (1 - alpha) * mValues[1];
+            gravity[2] = alpha * gravity[2] + (1 - alpha) * mValues[2];
+        }
+        
         currentAcceleration[0] = mValues[0] - gravity[0];
         currentAcceleration[1] = mValues[1] - gravity[1];
         currentAcceleration[2] = mValues[2] - gravity[2];
+        
         updateVelocity();
         mActivity.setValue(velocity);
     }	
@@ -48,9 +55,9 @@ public class MotionSensorModule extends SensorModule{
         // current acceleration since the last update. 
         float[] deltaVelocity = {0, 0, 0};
         float timeDeltaInSec = (float) (timeDelta) / 1000;
-        deltaVelocity[0] = round(timeDeltaInSec * currentAcceleration[0]);
-        deltaVelocity[1] = round(timeDeltaInSec * currentAcceleration[1]);
-        deltaVelocity[2] = round(timeDeltaInSec * currentAcceleration[2]);
+        deltaVelocity[0] = timeDelta * currentAcceleration[0];
+        deltaVelocity[1] = timeDelta * currentAcceleration[1];
+        deltaVelocity[2] = timeDelta * currentAcceleration[2];
 
         // Add the velocity change to the current velocity.
         velocity[0] += deltaVelocity[0];
@@ -69,11 +76,5 @@ public class MotionSensorModule extends SensorModule{
         distance[1] += round(scale * velocity[1] * timeDelta);
         distance[2] += round(scale * velocity[2] * timeDelta);
         prevVelocity = velocity;
-    }
-
-    private void applyFilter(float[] value, float[] rawValue) {
-        for (int i = 0; i < value.length; i++) {
-            value[i] = round(alpha * round(rawValue[i]) + (1 - alpha) * value[i]);
-        }
     }
 }

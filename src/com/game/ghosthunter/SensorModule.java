@@ -32,7 +32,7 @@ public abstract class SensorModule implements SensorEventListener{
 	}	
 	
 	public final void register() {
-		mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_GAME);
+		mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_FASTEST);
 	}
 	
 	public final void unregister() {
