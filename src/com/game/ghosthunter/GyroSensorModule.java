@@ -3,15 +3,15 @@ package com.game.ghosthunter;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 
-public class LightSensorModule extends SensorModule{
+public class GyroSensorModule extends SensorModule{
 	
-	public LightSensorModule(MainActivity mainActivity) {
-            super(mainActivity, Sensor.TYPE_LIGHT);
+	public GyroSensorModule(MainActivity mainActivity) {
+            super(mainActivity, Sensor.TYPE_GYROSCOPE);
 	}
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		super.onSensorChanged(event);
-		//mActivity.setValue(mValues);
+		mActivity.setValue(mValues);
 	}	
 }

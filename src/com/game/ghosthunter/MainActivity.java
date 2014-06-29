@@ -19,6 +19,7 @@ public class MainActivity extends Activity{
     
     private SensorManager mSensorManager;
     private LightSensorModule mLightSensorModule;
+    private GyroSensorModule mGyroSensorModule;
     
     private int width;
     private int height;
@@ -29,6 +30,7 @@ public class MainActivity extends Activity{
         
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mLightSensorModule = new LightSensorModule(this);
+        mGyroSensorModule = new GyroSensorModule(this);
         
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -78,7 +80,7 @@ public class MainActivity extends Activity{
     
     public void setValue(float[] value) {
     	 TextView tView = (TextView) findViewById(R.id.LightValue);
-         tView.setText(""+value[0]);
+         tView.setText(String.format("%.2f %.2f, %.2f" , value[0] , value[1] , value[2]));
     }
     
     public SensorManager getSensorManager() {
