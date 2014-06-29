@@ -12,6 +12,6 @@ public class GyroSensorModule extends SensorModule{
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		super.onSensorChanged(event);
-		mActivity.setValue(mValues);
+		//mActivity.setValue(mValues);
 	}	
 }
